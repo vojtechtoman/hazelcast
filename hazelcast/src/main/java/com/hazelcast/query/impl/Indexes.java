@@ -118,7 +118,7 @@ public class Indexes {
      *                false} otherwise.
      * @return the existing or created index.
      */
-    public synchronized InternalIndex addOrGetIndex(String name, boolean ordered) {
+    public synchronized InternalIndex addOrGetIndex(String name, boolean ordered, boolean fulltext) {
         InternalIndex index = indexesByName.get(name);
         if (index != null) {
             return index;
@@ -136,7 +136,7 @@ public class Indexes {
             return index;
         }
 
-        index = indexProvider.createIndex(name, components, ordered, extractors, serializationService, indexCopyBehavior,
+        index = indexProvider.createIndex(name, components, ordered, fulltext, extractors, serializationService, indexCopyBehavior,
                 stats.createPerIndexStats(ordered, usesCachedQueryableEntries));
 
         indexesByName.put(name, index);

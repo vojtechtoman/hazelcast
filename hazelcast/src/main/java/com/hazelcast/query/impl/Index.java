@@ -58,6 +58,8 @@ public interface Index {
      */
     boolean isOrdered();
 
+    boolean isFulltext();
+
     /**
      * @return the converter associated with this index; or {@code null} if the
      * converter is not known because there were no saves to this index and
@@ -129,6 +131,8 @@ public interface Index {
      * @return the produced result set.
      */
     Set<QueryableEntry> getRecords(Comparison comparison, Comparable value);
+
+    Set<QueryableEntry> getRecords(String fulltextQuery);
 
     /**
      * Clears out all entries from this index.

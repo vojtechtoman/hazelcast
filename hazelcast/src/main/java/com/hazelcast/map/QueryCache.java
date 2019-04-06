@@ -120,6 +120,11 @@ public interface QueryCache<K, V> {
     void addIndex(String attribute, boolean ordered);
 
     /**
+     * @see IMap#addFulltextIndex(String)
+     */
+    void addFulltextIndex(String attribute);
+
+    /**
      * @see IMap#getAll(Set)
      */
     Map<K, V> getAll(Set<K> keys);

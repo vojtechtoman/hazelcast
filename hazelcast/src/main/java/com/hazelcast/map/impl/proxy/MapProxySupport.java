@@ -1256,8 +1256,19 @@ abstract class MapProxySupport<K, V>
     public void addIndex(String attribute, boolean ordered) {
         validateIndexAttribute(attribute);
         try {
-            AddIndexOperation addIndexOperation = new AddIndexOperation(name, attribute, ordered);
+            AddIndexOperation addIndexOperation = new AddIndexOperation(name, attribute, ordered, false);
             operationService.invokeOnAllPartitions(SERVICE_NAME, new BinaryOperationFactory(addIndexOperation, getNodeEngine()));
+        } catch (Throwable t) {
+            throw rethrow(t);
+        }
+    }
+
+    @Override
+    public void addFulltextIndex(String attribute) {
+        validateIndexAttribute(attribute);
+        try {
+            AddIndexOperation addFtIndexOperation = new AddIndexOperation(name, attribute, false, true);
+            operationService.invokeOnAllPartitions(SERVICE_NAME, new BinaryOperationFactory(addFtIndexOperation, getNodeEngine()));
         } catch (Throwable t) {
             throw rethrow(t);
         }

@@ -55,24 +55,26 @@ public abstract class AbstractIndex implements InternalIndex {
     private final String name;
     private final String[] components;
     private final boolean ordered;
+    private final boolean fulltext;
     private final PerIndexStats stats;
 
     private volatile TypeConverter converter;
 
     @SuppressFBWarnings("EI_EXPOSE_REP2")
-    public AbstractIndex(String name, String[] components, boolean ordered, InternalSerializationService ss,
+    public AbstractIndex(String name, String[] components, boolean ordered, boolean fulltext, InternalSerializationService ss,
                          Extractors extractors, IndexCopyBehavior copyBehavior, PerIndexStats stats) {
         this.name = name;
         this.components = components;
         this.ordered = ordered;
+        this.fulltext = fulltext;
         this.ss = ss;
         this.extractors = extractors;
         this.copyBehavior = copyBehavior;
-        this.indexStore = createIndexStore(ordered, stats);
+        this.indexStore = createIndexStore(ordered, fulltext, stats);
         this.stats = stats;
     }
 
-    protected abstract IndexStore createIndexStore(boolean ordered, PerIndexStats stats);
+    protected abstract IndexStore createIndexStore(boolean ordered, boolean fulltext, PerIndexStats stats);
 
     @Override
     public String getName() {
@@ -88,6 +90,11 @@ public abstract class AbstractIndex implements InternalIndex {
     @Override
     public boolean isOrdered() {
         return ordered;
+    }
+
+    @Override
+    public boolean isFulltext() {
+        return fulltext;
     }
 
     @Override
@@ -193,6 +200,23 @@ public abstract class AbstractIndex implements InternalIndex {
         }
 
         Set<QueryableEntry> result = indexStore.getRecords(comparison, convert(value));
+        stats.onIndexHit(timestamp, result.size());
+        return result;
+    }
+
+    @Override
+    public Set<QueryableEntry> getRecords(String fulltextQuery) {
+        if (!isFulltext()) {
+        throw new UnsupportedOperationException();
+        }
+        long timestamp = stats.makeTimestamp();
+
+        if (converter == null) {
+            stats.onIndexHit(timestamp, 0);
+            return emptySet();
+        }
+
+        Set<QueryableEntry> result = indexStore.getRecords(fulltextQuery);
         stats.onIndexHit(timestamp, result.size());
         return result;
     }

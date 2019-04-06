@@ -47,6 +47,7 @@ import com.hazelcast.nio.ClassLoaderUtil;
 import com.hazelcast.nio.serialization.Data;
 import com.hazelcast.nio.serialization.SerializableByConvention;
 import com.hazelcast.query.impl.Index;
+import com.hazelcast.query.impl.IndexInfo;
 import com.hazelcast.query.impl.Indexes;
 import com.hazelcast.query.impl.QueryableEntry;
 import com.hazelcast.query.impl.getters.Extractors;
@@ -62,7 +63,9 @@ import com.hazelcast.wan.WANReplicationQueueFullException;
 import com.hazelcast.wan.WanReplicationPublisher;
 import com.hazelcast.wan.WanReplicationService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -446,16 +449,16 @@ public class MapContainer {
         return objectNamespace;
     }
 
-    public Map<String, Boolean> getIndexDefinitions() {
-        Map<String, Boolean> definitions = new HashMap<String, Boolean>();
+    public List<IndexInfo> getIndexDefinitions() {
+        List<IndexInfo> definitions = new ArrayList<IndexInfo>();
         if (isGlobalIndexEnabled()) {
             for (Index index : globalIndexes.getIndexes()) {
-                definitions.put(index.getName(), index.isOrdered());
+                definitions.add(new IndexInfo(index.getName(), index.isOrdered(), index.isFulltext()));
             }
         } else {
             for (PartitionContainer container : mapServiceContext.getPartitionContainers()) {
                 for (Index index : container.getIndexes(name).getIndexes()) {
-                    definitions.put(index.getName(), index.isOrdered());
+                    definitions.add(new IndexInfo(index.getName(), index.isOrdered(), index.isFulltext()));
                 }
             }
         }

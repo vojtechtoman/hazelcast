@@ -39,7 +39,7 @@ public class MapAddIndexMessageTask
 
     @Override
     protected OperationFactory createOperationFactory() {
-        return new AddIndexOperationFactory(parameters.name, parameters.attribute, parameters.ordered);
+        return new AddIndexOperationFactory(parameters.name, parameters.attribute, parameters.ordered, false); //TODO VT fti
     }
 
     @Override

@@ -133,6 +133,10 @@ public final class NullQueryCache implements InternalQueryCache {
     }
 
     @Override
+    public void addFulltextIndex(String attribute) {
+    }
+
+    @Override
     public Map getAll(Set keys) {
         return null;
     }

@@ -195,6 +195,11 @@ public class AttributeIndexRegistry {
         }
 
         @Override
+        public boolean isFulltext() {
+            return delegate.isFulltext();
+        }
+
+        @Override
         public TypeConverter getConverter() {
             CompositeConverter converter = (CompositeConverter) delegate.getConverter();
             return converter == null ? null : converter.getComponentConverter(0);
@@ -281,6 +286,11 @@ public class AttributeIndexRegistry {
                 default:
                     throw new IllegalStateException("unexpected comparison: " + comparison);
             }
+        }
+
+        @Override
+        public Set<QueryableEntry> getRecords(String fulltextQuery) {
+            throw new UnsupportedOperationException();
         }
 
         @Override

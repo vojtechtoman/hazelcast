@@ -41,12 +41,12 @@ public class IndexInfoTest {
 
     @Before
     public void setUp() {
-        indexInfo = new IndexInfo("foo", true);
-        indexInfoSameAttributes = new IndexInfo("foo", true);
+        indexInfo = new IndexInfo("foo", true, false);
+        indexInfoSameAttributes = new IndexInfo("foo", true, false);
 
-        indexInfoOtherIsOrdered = new IndexInfo("foo", false);
-        indexInfoOtherAttributeName = new IndexInfo("bar", true);
-        indexInfoNullAttributeName = new IndexInfo(null, true);
+        indexInfoOtherIsOrdered = new IndexInfo("foo", false, false);
+        indexInfoOtherAttributeName = new IndexInfo("bar", true, false);
+        indexInfoNullAttributeName = new IndexInfo(null, true, false);
     }
 
     @Test

@@ -85,7 +85,7 @@ abstract class AbstractInternalQueryCache<K, V> implements InternalQueryCache<K,
                 queryCacheConfig, getEvictionListener(), extractors);
 
         for (MapIndexConfig indexConfig : queryCacheConfig.getIndexConfigs()) {
-            indexes.addOrGetIndex(indexConfig.getAttribute(), indexConfig.isOrdered());
+            indexes.addOrGetIndex(indexConfig.getAttribute(), indexConfig.isOrdered(), indexConfig.isFulltext());
         }
     }
 

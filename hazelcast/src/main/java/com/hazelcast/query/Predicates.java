@@ -17,18 +17,7 @@
 package com.hazelcast.query;
 
 import com.hazelcast.query.impl.FalsePredicate;
-import com.hazelcast.query.impl.predicates.AndPredicate;
-import com.hazelcast.query.impl.predicates.BetweenPredicate;
-import com.hazelcast.query.impl.predicates.EqualPredicate;
-import com.hazelcast.query.impl.predicates.GreaterLessPredicate;
-import com.hazelcast.query.impl.predicates.ILikePredicate;
-import com.hazelcast.query.impl.predicates.InPredicate;
-import com.hazelcast.query.impl.predicates.InstanceOfPredicate;
-import com.hazelcast.query.impl.predicates.LikePredicate;
-import com.hazelcast.query.impl.predicates.NotEqualPredicate;
-import com.hazelcast.query.impl.predicates.NotPredicate;
-import com.hazelcast.query.impl.predicates.OrPredicate;
-import com.hazelcast.query.impl.predicates.RegexPredicate;
+import com.hazelcast.query.impl.predicates.*;
 
 import java.util.Date;
 
@@ -425,6 +414,10 @@ public final class Predicates {
      */
     public static Predicate in(String attribute, Comparable... values) {
         return new InPredicate(attribute, values);
+    }
+
+    public static Predicate fulltext(String attribute, String query) {
+        return new FulltextPredicate(attribute, query);
     }
 
 }

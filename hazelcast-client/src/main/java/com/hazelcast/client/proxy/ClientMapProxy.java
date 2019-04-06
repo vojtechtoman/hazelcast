@@ -1411,6 +1411,11 @@ public class ClientMapProxy<K, V> extends ClientProxy
     }
 
     @Override
+    public void addFulltextIndex(String attribute) {
+        throw new UnsupportedOperationException("vt");
+    }
+
+    @Override
     public LocalMapStats getLocalMapStats() {
         return new LocalMapStatsImpl();
     }

@@ -27,25 +27,29 @@ public class IndexInfo implements IdentifiedDataSerializable, Comparable<IndexIn
 
     private String name;
     private boolean ordered;
+    private boolean fulltext;
 
     public IndexInfo() {
     }
 
-    public IndexInfo(String name, boolean ordered) {
+    public IndexInfo(String name, boolean ordered, boolean fulltext) {
         this.name = name;
         this.ordered = ordered;
+        this.fulltext = fulltext;
     }
 
     @Override
     public void writeData(ObjectDataOutput out) throws IOException {
         out.writeUTF(name);
         out.writeBoolean(ordered);
+        out.writeBoolean(fulltext);
     }
 
     @Override
     public void readData(ObjectDataInput in) throws IOException {
         name = in.readUTF();
         ordered = in.readBoolean();
+        fulltext = in.readBoolean();
     }
 
     public String getName() {
@@ -54,6 +58,10 @@ public class IndexInfo implements IdentifiedDataSerializable, Comparable<IndexIn
 
     public boolean isOrdered() {
         return ordered;
+    }
+
+    public boolean isFulltext() {
+        return fulltext;
     }
 
     @Override
@@ -79,6 +87,9 @@ public class IndexInfo implements IdentifiedDataSerializable, Comparable<IndexIn
         if (ordered != indexInfo.ordered) {
             return false;
         }
+        if (fulltext != indexInfo.fulltext) {
+            return false;
+        }
         return name != null ? name.equals(indexInfo.name) : indexInfo.name == null;
 
     }
@@ -87,6 +98,7 @@ public class IndexInfo implements IdentifiedDataSerializable, Comparable<IndexIn
     public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
         result = 31 * result + (ordered ? 1 : 0);
+        result = 31 * result + (fulltext ? 1 : 0);
         return result;
     }
 
@@ -94,7 +106,8 @@ public class IndexInfo implements IdentifiedDataSerializable, Comparable<IndexIn
     public int compareTo(IndexInfo other) {
         int attributeNameCompareResult = name.compareTo(other.name);
         if (attributeNameCompareResult == 0) {
-            return Boolean.valueOf(ordered).compareTo(other.ordered);
+            int orderedCompareResult = Boolean.valueOf(ordered).compareTo(other.ordered);
+            return orderedCompareResult == 0 ? Boolean.valueOf(fulltext).compareTo(other.fulltext) : orderedCompareResult;
         }
         return attributeNameCompareResult;
     }

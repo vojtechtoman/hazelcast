@@ -38,6 +38,7 @@ public class MapIndexConfig implements IdentifiedDataSerializable {
 
     private String attribute;
     private boolean ordered;
+    private boolean fulltext;
     private transient MapIndexConfigReadOnly readOnly;
 
     /**
@@ -55,13 +56,19 @@ public class MapIndexConfig implements IdentifiedDataSerializable {
      * @see #setAttribute(String)
      */
     public MapIndexConfig(String attribute, boolean ordered) {
+        this(attribute, ordered, false);
+    }
+
+    public MapIndexConfig(String attribute, boolean ordered, boolean fulltext) {
         setAttribute(attribute);
         setOrdered(ordered);
+        setFulltext(fulltext);
     }
 
     public MapIndexConfig(MapIndexConfig config) {
         attribute = config.getAttribute();
         ordered = config.isOrdered();
+        fulltext = config.fulltext;
     }
 
     /**
@@ -109,6 +116,10 @@ public class MapIndexConfig implements IdentifiedDataSerializable {
         return ordered;
     }
 
+    public boolean isFulltext() {
+        return fulltext;
+    }
+
     /**
      * Configures the index to be ordered or not ordered. Some indices can be ordered, such as age.
      * Sometimes you want to look for all people with an age equal or greater than X.
@@ -119,6 +130,11 @@ public class MapIndexConfig implements IdentifiedDataSerializable {
      */
     public MapIndexConfig setOrdered(boolean ordered) {
         this.ordered = ordered;
+        return this;
+    }
+
+    public MapIndexConfig setFulltext(boolean fulltext) {
+        this.fulltext = fulltext;
         return this;
     }
 

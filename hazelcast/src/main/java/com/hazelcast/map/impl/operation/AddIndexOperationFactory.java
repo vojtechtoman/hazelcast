@@ -28,19 +28,21 @@ public class AddIndexOperationFactory extends AbstractMapOperationFactory {
     private String name;
     private String attributeName;
     private boolean ordered;
+    private boolean fulltext;
 
     public AddIndexOperationFactory() {
     }
 
-    public AddIndexOperationFactory(String name, String attributeName, boolean ordered) {
+    public AddIndexOperationFactory(String name, String attributeName, boolean ordered, boolean fulltext) {
         this.name = name;
         this.attributeName = attributeName;
         this.ordered = ordered;
+        this.fulltext = fulltext;
     }
 
     @Override
     public Operation createOperation() {
-        return new AddIndexOperation(name, attributeName, ordered);
+        return new AddIndexOperation(name, attributeName, ordered, fulltext);
     }
 
     @Override
@@ -48,6 +50,7 @@ public class AddIndexOperationFactory extends AbstractMapOperationFactory {
         out.writeUTF(name);
         out.writeUTF(attributeName);
         out.writeBoolean(ordered);
+        out.writeBoolean(fulltext);
     }
 
     @Override
@@ -55,6 +58,7 @@ public class AddIndexOperationFactory extends AbstractMapOperationFactory {
         name = in.readUTF();
         attributeName = in.readUTF();
         ordered = in.readBoolean();
+        fulltext = in.readBoolean();
     }
 
     @Override

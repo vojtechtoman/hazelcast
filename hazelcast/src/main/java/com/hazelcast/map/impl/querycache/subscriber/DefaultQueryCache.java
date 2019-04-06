@@ -454,9 +454,18 @@ class DefaultQueryCache<K, V> extends AbstractInternalQueryCache<K, V> {
 
     @Override
     public void addIndex(String attribute, boolean ordered) {
+        doAddIndex(attribute, ordered, false);
+    }
+
+    @Override
+    public void addFulltextIndex(String attribute) {
+        doAddIndex(attribute, false, true);
+    }
+
+    private void doAddIndex(String attribute, boolean ordered, boolean fulltext) {
         checkNotNull(attribute, "attribute cannot be null");
 
-        getIndexes().addOrGetIndex(attribute, ordered);
+        getIndexes().addOrGetIndex(attribute, ordered, fulltext);
 
         InternalSerializationService serializationService = context.getSerializationService();
 
@@ -469,7 +478,6 @@ class DefaultQueryCache<K, V> extends AbstractInternalQueryCache<K, V> {
             indexes.putEntry(queryable, null, Index.OperationSource.USER);
         }
     }
-
     @Override
     public String getName() {
         return cacheName;

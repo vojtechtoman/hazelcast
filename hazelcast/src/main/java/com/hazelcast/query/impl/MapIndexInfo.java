@@ -38,8 +38,8 @@ public class MapIndexInfo implements IdentifiedDataSerializable {
     public MapIndexInfo() {
     }
 
-    public void addIndexInfo(String attributeName, boolean ordered) {
-        indexInfos.add(new IndexInfo(attributeName, ordered));
+    public void addIndexInfo(String attributeName, boolean ordered, boolean fulltext) {
+        indexInfos.add(new IndexInfo(attributeName, ordered, fulltext));
     }
 
     public void addIndexInfos(Collection<IndexInfo> indexInfos) {

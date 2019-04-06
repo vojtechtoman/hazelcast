@@ -118,14 +118,14 @@ public class MapReplicationStateHolder implements IdentifiedDataSerializable, Ve
             if (mapContainer.isGlobalIndexEnabled()) {
                 // global-index
                 for (Index index : mapContainer.getIndexes().getIndexes()) {
-                    indexInfos.add(new IndexInfo(index.getName(), index.isOrdered()));
+                    indexInfos.add(new IndexInfo(index.getName(), index.isOrdered(), index.isFulltext()));
                 }
             } else {
                 // partitioned-index
                 final Indexes indexes = mapContainer.getIndexes(container.getPartitionId());
                 if (indexes != null && indexes.haveAtLeastOneIndex()) {
                     for (Index index : indexes.getIndexes()) {
-                        indexInfos.add(new IndexInfo(index.getName(), index.isOrdered()));
+                        indexInfos.add(new IndexInfo(index.getName(), index.isOrdered(), index.isFulltext()));
                     }
                 }
             }
@@ -152,9 +152,9 @@ public class MapReplicationStateHolder implements IdentifiedDataSerializable, Ve
                 MapContainer mapContainer = recordStore.getMapContainer();
                 PartitionContainer partitionContainer = recordStore.getMapContainer().getMapServiceContext()
                         .getPartitionContainer(operation.getPartitionId());
-                for (Map.Entry<String, Boolean> indexDefinition : mapContainer.getIndexDefinitions().entrySet()) {
+                for (IndexInfo indexDefinition : mapContainer.getIndexDefinitions()) {
                     Indexes indexes = mapContainer.getIndexes(partitionContainer.getPartitionId());
-                    indexes.addOrGetIndex(indexDefinition.getKey(), indexDefinition.getValue());
+                    indexes.addOrGetIndex(indexDefinition.getName(), indexDefinition.isOrdered(), indexDefinition.isFulltext());
                 }
 
                 final Indexes indexes = mapContainer.getIndexes(partitionContainer.getPartitionId());
@@ -219,13 +219,13 @@ public class MapReplicationStateHolder implements IdentifiedDataSerializable, Ve
                 Indexes indexes = mapContainer.getIndexes();
                 // optimisation not to synchronize each partition thread on the addOrGetIndex method
                 if (indexes.getIndex(indexInfo.getName()) == null) {
-                    indexes.addOrGetIndex(indexInfo.getName(), indexInfo.isOrdered());
+                    indexes.addOrGetIndex(indexInfo.getName(), indexInfo.isOrdered(), indexInfo.isFulltext());
                 }
             }
         } else {
             Indexes indexes = mapContainer.getIndexes(operation.getPartitionId());
             for (IndexInfo indexInfo : indexInfos) {
-                indexes.addOrGetIndex(indexInfo.getName(), indexInfo.isOrdered());
+                indexes.addOrGetIndex(indexInfo.getName(), indexInfo.isOrdered(), indexInfo.isFulltext());
             }
         }
     }

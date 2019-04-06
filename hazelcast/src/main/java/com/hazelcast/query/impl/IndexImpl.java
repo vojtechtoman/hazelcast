@@ -32,13 +32,16 @@ public class IndexImpl extends AbstractIndex {
 
     private final Set<Integer> indexedPartitions = newSetFromMap(new ConcurrentHashMap<Integer, Boolean>());
 
-    public IndexImpl(String name, String[] components, boolean ordered, InternalSerializationService ss, Extractors extractors,
+    public IndexImpl(String name, String[] components, boolean ordered, boolean fulltext, InternalSerializationService ss, Extractors extractors,
                      IndexCopyBehavior copyBehavior, PerIndexStats stats) {
-        super(name, components, ordered, ss, extractors, copyBehavior, stats);
+        super(name, components, ordered, fulltext, ss, extractors, copyBehavior, stats);
     }
 
     @Override
-    protected IndexStore createIndexStore(boolean ordered, PerIndexStats stats) {
+    protected IndexStore createIndexStore(boolean ordered, boolean fulltext, PerIndexStats stats) {
+        if (fulltext) {
+            return new FulltextIndexStore(copyBehavior);
+        }
         return ordered ? new OrderedIndexStore(copyBehavior) : new UnorderedIndexStore(copyBehavior);
     }
 

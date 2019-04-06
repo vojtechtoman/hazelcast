@@ -232,6 +232,11 @@ public class UnorderedIndexStore extends BaseIndexStore {
         }
     }
 
+    @Override
+    public Set<QueryableEntry> getRecords(String fulltextQuery) {
+        throw new UnsupportedOperationException();
+    }
+
     /**
      * Adds entry to the given index map without copying it.
      * Needs to be invoked in a thread-safe way.

@@ -105,6 +105,11 @@ public class GlobalQueryContextWithStats extends QueryContext {
         }
 
         @Override
+        public boolean isFulltext() {
+            return delegate.isFulltext();
+        }
+
+        @Override
         public TypeConverter getConverter() {
             return delegate.getConverter();
         }
@@ -146,6 +151,14 @@ public class GlobalQueryContextWithStats extends QueryContext {
             hasQueries = true;
             return result;
         }
+
+        @Override
+        public Set<QueryableEntry> getRecords(String fulltextQuery) {
+            Set<QueryableEntry> result = delegate.getRecords(fulltextQuery);
+            hasQueries = true;
+            return result;
+        }
+
 
         @Override
         public void clear() {

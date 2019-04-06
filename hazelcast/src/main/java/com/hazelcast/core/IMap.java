@@ -2459,6 +2459,8 @@ public interface IMap<K, V> extends ConcurrentMap<K, V>, LegacyAsyncMap<K, V> {
      */
     void addIndex(String attribute, boolean ordered);
 
+    void addFulltextIndex(String attribute);
+
     /**
      * Returns LocalMapStats for this map.
      * <p>

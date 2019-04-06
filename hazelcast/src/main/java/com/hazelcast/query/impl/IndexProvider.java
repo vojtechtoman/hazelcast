@@ -44,7 +44,7 @@ public interface IndexProvider {
      * @param stats        the index stats instance to report the statistics to.
      * @return the created index instance.
      */
-    InternalIndex createIndex(String name, String[] components, boolean ordered, Extractors extractors,
+    InternalIndex createIndex(String name, String[] components, boolean ordered, boolean fulltext, Extractors extractors,
                               InternalSerializationService ss, IndexCopyBehavior copyBehavior, PerIndexStats stats);
 
 }
