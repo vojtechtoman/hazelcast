@@ -110,11 +110,11 @@ public class FulltextIndexStore extends BaseIndexStore {
     }
 
     @Override
-    public Set<QueryableEntry> getRecords(String fulltextQuery) {
+    public Set<QueryableEntry> getFulltextRecords(String query) {
         takeReadLock();
         try {
             //MultiResultSet results = createMultiResultSet();
-            return asQueryableEntrySet(invertedIndex.search(fulltextQuery));
+            return asQueryableEntrySet(invertedIndex.search(query));
             //copyToMultiResultSet(results, records);
             //return results;
         } finally {

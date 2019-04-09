@@ -289,7 +289,7 @@ public class AttributeIndexRegistry {
         }
 
         @Override
-        public Set<QueryableEntry> getRecords(String fulltextQuery) {
+        public Set<QueryableEntry> getFulltextRecords(String query) {
             throw new UnsupportedOperationException();
         }
 

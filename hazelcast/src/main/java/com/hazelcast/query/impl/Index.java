@@ -132,7 +132,7 @@ public interface Index {
      */
     Set<QueryableEntry> getRecords(Comparison comparison, Comparable value);
 
-    Set<QueryableEntry> getRecords(String fulltextQuery);
+    Set<QueryableEntry> getFulltextRecords(String query);
 
     /**
      * Clears out all entries from this index.

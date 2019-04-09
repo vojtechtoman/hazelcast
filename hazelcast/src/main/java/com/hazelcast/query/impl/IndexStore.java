@@ -145,5 +145,5 @@ public interface IndexStore {
      */
     Set<QueryableEntry> getRecords(Comparable from, boolean fromInclusive, Comparable to, boolean toInclusive);
 
-    Set<QueryableEntry> getRecords(String fulltextQuery);
+    Set<QueryableEntry> getFulltextRecords(String query);
 }

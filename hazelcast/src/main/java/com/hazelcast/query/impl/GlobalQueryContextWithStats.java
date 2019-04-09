@@ -153,8 +153,8 @@ public class GlobalQueryContextWithStats extends QueryContext {
         }
 
         @Override
-        public Set<QueryableEntry> getRecords(String fulltextQuery) {
-            Set<QueryableEntry> result = delegate.getRecords(fulltextQuery);
+        public Set<QueryableEntry> getFulltextRecords(String query) {
+            Set<QueryableEntry> result = delegate.getFulltextRecords(query);
             hasQueries = true;
             return result;
         }

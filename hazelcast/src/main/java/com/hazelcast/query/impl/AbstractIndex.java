@@ -205,7 +205,7 @@ public abstract class AbstractIndex implements InternalIndex {
     }
 
     @Override
-    public Set<QueryableEntry> getRecords(String fulltextQuery) {
+    public Set<QueryableEntry> getFulltextRecords(String query) {
         if (!isFulltext()) {
             throw new UnsupportedOperationException();
         }
@@ -216,7 +216,7 @@ public abstract class AbstractIndex implements InternalIndex {
             return emptySet();
         }
 
-        Set<QueryableEntry> result = indexStore.getRecords(fulltextQuery);
+        Set<QueryableEntry> result = indexStore.getFulltextRecords(query);
         stats.onIndexHit(timestamp, result.size());
         return result;
     }

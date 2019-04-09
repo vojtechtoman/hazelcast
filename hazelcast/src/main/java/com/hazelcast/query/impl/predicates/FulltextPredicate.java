@@ -55,7 +55,7 @@ public class FulltextPredicate extends AbstractIndexAwarePredicate {
     @Override
     public Set<QueryableEntry> filter(QueryContext queryContext) {
         Index index = matchIndex(queryContext, QueryContext.IndexMatchHint.PREFER_UNORDERED);
-        return index.getRecords(query);
+        return index.getFulltextRecords(query);
     }
 
     protected boolean applyForSingleAttributeValue(Comparable attributeValue) {
