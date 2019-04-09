@@ -207,7 +207,7 @@ public abstract class AbstractIndex implements InternalIndex {
     @Override
     public Set<QueryableEntry> getRecords(String fulltextQuery) {
         if (!isFulltext()) {
-        throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException();
         }
         long timestamp = stats.makeTimestamp();
 

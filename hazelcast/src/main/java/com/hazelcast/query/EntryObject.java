@@ -90,6 +90,10 @@ public class EntryObject {
         return addPredicate(Predicates.in(qb.getAttribute(), values));
     }
 
+    public PredicateBuilder fulltext(String fulltextQuery) {
+        return addPredicate(Predicates.fulltext(qb.getAttribute(), fulltextQuery));
+    }
+
     private PredicateBuilder addPredicate(Predicate predicate) {
         qb.lsPredicates.add(predicate);
         return qb;

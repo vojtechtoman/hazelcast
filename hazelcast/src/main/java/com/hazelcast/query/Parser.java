@@ -42,6 +42,7 @@ class Parser {
     private static final int LIKE_PRECEDENCE = 10;
     private static final int ILIKE_PRECEDENCE = 10;
     private static final int REGEX_PRECEDENCE = 10;
+    private static final int FULLTEXT_PRECEDENCE = 10;
     private static final int AND_PRECEDENCE = 5;
     private static final int OR_PRECEDENCE = 3;
 
@@ -65,6 +66,7 @@ class Parser {
         precedence.put("like", LIKE_PRECEDENCE);
         precedence.put("ilike", ILIKE_PRECEDENCE);
         precedence.put("regex", REGEX_PRECEDENCE);
+        precedence.put("contains", FULLTEXT_PRECEDENCE);
         precedence.put("and", AND_PRECEDENCE);
         precedence.put("or", OR_PRECEDENCE);
         PRECEDENCE = Collections.unmodifiableMap(precedence);

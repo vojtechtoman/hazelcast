@@ -19,9 +19,7 @@ package com.hazelcast.query.impl;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.hazelcast.query.Predicate;
-import com.hazelcast.query.Predicates;
-import com.hazelcast.query.SqlPredicate;
+import com.hazelcast.query.*;
 import com.hazelcast.test.HazelcastTestSupport;
 import com.hazelcast.test.annotation.QuickTest;
 import org.junit.Test;
@@ -29,15 +27,33 @@ import org.junit.experimental.categories.Category;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Iterator;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.startsWith;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 @Category(QuickTest.class)
 public class FulltextIndexIntegrationTest extends HazelcastTestSupport {
 
     private static final String MAP_NAME = "map";
+
+    public static class Quote implements Serializable {
+        private String author;
+        private String text;
+
+        public Quote(String author, String text) {
+            this.author = author;
+            this.text = text;
+        }
+
+        public String getAuthor() {
+            return author;
+        }
+
+        public String getText() {
+            return text;
+        }
+    }
 
     @Override
     protected Config getConfig() {
@@ -46,31 +62,39 @@ public class FulltextIndexIntegrationTest extends HazelcastTestSupport {
         return config;
     }
 
-    public static class Doc implements Serializable {
-        private String text;
+    private IMap<String, Quote> getQuotes() {
+        HazelcastInstance instance = createHazelcastInstance();
+        IMap<String, Quote> map = instance.getMap(MAP_NAME);
+        map.addFulltextIndex("text");
 
-        public Doc(String text) {
-            this.text = text;
-        }
-
-        public String getText() {
-            return text;
-        }
+        map.put("1", new Quote("Donald Knuth", "Beware of bugs in the above code; I have only proved it correct, not tried it."));
+        map.put("2", new Quote("Donald Knuth", "I can’t go to a restaurant and order food because I keep looking at the fonts on the menu."));
+        map.put("3", new Quote("Edsger W. Dijkstra",
+                "If debugging is the process of removing bugs, then programming must be the process of putting them in."));
+        return map;
     }
 
     @Test
-    public void testSimpleQuery() {
-        HazelcastInstance instance = createHazelcastInstance();
-        IMap<String, Doc> map = instance.getMap(MAP_NAME);
-        map.addFulltextIndex("text");
+    public void testFulltextPredicate() {
+        IMap<String, Quote> map = getQuotes();
 
-        map.put("foo", new Doc("Quick brown fox jumps over a lazy dog"));
-        map.put("bar", new Doc("I'm going to make him an offer he can't refuse."));
-
-        Predicate predicate = Predicates.fulltext("text", "brown fox");
-        Collection<Doc> values = map.values(predicate);
+        PredicateBuilder builder = new PredicateBuilder();
+        EntryObject entryObject = builder.getEntryObject();
+        Predicate predicate = entryObject.get("text").fulltext("removing bugs").and(entryObject.get("author").equal("Donald Knuth"));
+        Collection<Quote> values = map.values(predicate);
         assertThat(values, hasSize(1));
-        assertThat(values.iterator().next().getText(), startsWith("Quick brown"));
+        assertThat(values.iterator().next().getAuthor(), is("Donald Knuth"));
+    }
+
+    @Test
+    public void testFulltextSql() {
+        IMap<String, Quote> map = getQuotes();
+
+        Collection<Quote> values = map.values(new SqlPredicate("text contains 'removing bugs'"));
+        assertThat(values, hasSize(2));
+        Iterator<Quote> it = values.iterator();
+        assertThat(it.next().getAuthor(), is("Edsger W. Dijkstra"));
+        assertThat(it.next().getAuthor(), is("Donald Knuth"));
     }
 
 }

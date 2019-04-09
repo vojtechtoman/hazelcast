@@ -39,16 +39,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.hazelcast.internal.serialization.impl.FactoryIdHelper.PREDICATE_DS_FACTORY_ID;
-import static com.hazelcast.query.Predicates.between;
-import static com.hazelcast.query.Predicates.equal;
-import static com.hazelcast.query.Predicates.greaterEqual;
-import static com.hazelcast.query.Predicates.greaterThan;
-import static com.hazelcast.query.Predicates.ilike;
-import static com.hazelcast.query.Predicates.lessEqual;
-import static com.hazelcast.query.Predicates.lessThan;
-import static com.hazelcast.query.Predicates.like;
-import static com.hazelcast.query.Predicates.notEqual;
-import static com.hazelcast.query.Predicates.regex;
+import static com.hazelcast.query.Predicates.*;
 
 /**
  * This class contains methods related to conversion of sql query to predicate.
@@ -282,6 +273,12 @@ public class SqlPredicate
                         Object first = toValue(tokens.remove(position), mapPhrases);
                         Object second = toValue(tokens.remove(position), mapPhrases);
                         setOrAdd(tokens, position, flattenCompound(eval(first), eval(second), OrPredicate.class));
+                    } else if ("CONTAINS".equalsIgnoreCase(token)) {
+                        int position = (i - 2);
+                        validateOperandPosition(position);
+                        Object first = toValue(tokens.remove(position), mapPhrases);
+                        Object second = toValue(tokens.remove(position), mapPhrases);
+                        setOrAdd(tokens, position, fulltext((String) first, (String) second));
                     } else {
                         throw new RuntimeException("Unknown token " + token);
                     }

@@ -20,9 +20,9 @@ import com.hazelcast.nio.serialization.Data;
 import com.hazelcast.query.impl.fulltext.Document;
 import com.hazelcast.query.impl.fulltext.FulltextUtils;
 import com.hazelcast.query.impl.fulltext.InvertedIndex;
+import com.hazelcast.query.impl.fulltext.SearchResult;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.hazelcast.query.impl.AbstractIndex.NULL;
 
@@ -113,13 +113,44 @@ public class FulltextIndexStore extends BaseIndexStore {
     public Set<QueryableEntry> getRecords(String fulltextQuery) {
         takeReadLock();
         try {
-            MultiResultSet results = createMultiResultSet();
-            Map<Data, QueryableEntry> records = invertedIndex.search(fulltextQuery);
-            copyToMultiResultSet(results, records);
-            return results;
+            //MultiResultSet results = createMultiResultSet();
+            return asQueryableEntrySet(invertedIndex.search(fulltextQuery));
+            //copyToMultiResultSet(results, records);
+            //return results;
         } finally {
             releaseReadLock();
         }
+    }
+
+    private static AbstractSet<QueryableEntry> asQueryableEntrySet(final Collection<SearchResult> set) {
+        return new AbstractSet<QueryableEntry>() {
+
+            @Override
+            public Iterator<QueryableEntry> iterator() {
+                return new Iterator<QueryableEntry>() {
+                    private Iterator<SearchResult> it = set.iterator();
+                    @Override
+                    public boolean hasNext() {
+                        return it.hasNext();
+                    }
+
+                    @Override
+                    public QueryableEntry next() {
+                        return it.next().getDocument().getEntry();
+                    }
+
+                    @Override
+                    public void remove() {
+                        throw new UnsupportedOperationException();
+                    }
+                };
+            }
+
+            @Override
+            public int size() {
+                return set.size();
+            }
+        };
     }
 
     @Override
