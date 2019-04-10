@@ -20,6 +20,7 @@ import com.hazelcast.config.Config;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.query.*;
+import com.hazelcast.query.impl.predicates.FulltextPredicate;
 import com.hazelcast.test.HazelcastTestSupport;
 import com.hazelcast.test.annotation.QuickTest;
 import org.junit.Test;
@@ -67,9 +68,11 @@ public class FulltextIndexIntegrationTest extends HazelcastTestSupport {
         IMap<String, Quote> map = instance.getMap(MAP_NAME);
         map.addFulltextIndex("text");
 
-        map.put("1", new Quote("Donald Knuth", "Beware of bugs in the above code; I have only proved it correct, not tried it."));
-        map.put("2", new Quote("Donald Knuth", "I can’t go to a restaurant and order food because I keep looking at the fonts on the menu."));
-        map.put("3", new Quote("Edsger W. Dijkstra",
+        map.put("q1", new Quote("Donald Knuth",
+                "Beware of bugs in the above code; I have only proved it correct, not tried it."));
+        map.put("q2", new Quote("Donald Knuth",
+                "I can’t go to a restaurant and order food because I keep looking at the fonts on the menu."));
+        map.put("q3", new Quote("Edsger W. Dijkstra",
                 "If debugging is the process of removing bugs, then programming must be the process of putting them in."));
         return map;
     }
@@ -78,12 +81,11 @@ public class FulltextIndexIntegrationTest extends HazelcastTestSupport {
     public void testFulltextPredicate() {
         IMap<String, Quote> map = getQuotes();
 
-        PredicateBuilder builder = new PredicateBuilder();
-        EntryObject entryObject = builder.getEntryObject();
-        Predicate predicate = entryObject.get("text").fulltext("removing bugs").and(entryObject.get("author").equal("Donald Knuth"));
-        Collection<Quote> values = map.values(predicate);
-        assertThat(values, hasSize(1));
-        assertThat(values.iterator().next().getAuthor(), is("Donald Knuth"));
+        Collection<Quote> values = map.values(new FulltextPredicate("text", "text contains 'removing bugs'"));
+        assertThat(values, hasSize(2));
+        Iterator<Quote> it = values.iterator();
+        assertThat(it.next().getAuthor(), is("Edsger W. Dijkstra"));
+        assertThat(it.next().getAuthor(), is("Donald Knuth"));
     }
 
     @Test
@@ -95,6 +97,19 @@ public class FulltextIndexIntegrationTest extends HazelcastTestSupport {
         Iterator<Quote> it = values.iterator();
         assertThat(it.next().getAuthor(), is("Edsger W. Dijkstra"));
         assertThat(it.next().getAuthor(), is("Donald Knuth"));
+    }
+
+    @Test
+    public void testCompositePredicate() {
+        IMap<String, Quote> map = getQuotes();
+
+        PredicateBuilder builder = new PredicateBuilder();
+        EntryObject entryObject = builder.getEntryObject();
+        Predicate predicate = entryObject.get("text").fulltext("removing bugs")
+                .and(entryObject.get("author").equal("Donald Knuth"));
+        Collection<Quote> values = map.values(predicate);
+        assertThat(values, hasSize(1));
+        assertThat(values.iterator().next().getAuthor(), is("Donald Knuth"));
     }
 
 }

@@ -43,10 +43,6 @@ public class FulltextPredicate extends AbstractIndexAwarePredicate {
     public FulltextPredicate() {
     }
 
-    public FulltextPredicate(String attribute) {
-        super(attribute);
-    }
-
     public FulltextPredicate(String attribute, String query) {
         super(attribute);
         this.query = query;
