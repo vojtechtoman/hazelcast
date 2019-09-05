@@ -1706,6 +1706,8 @@ class MemberDomConfigProcessor extends AbstractDomConfigProcessor {
             String name = cleanNodeName(n);
             if ("fsync".equals(name)) {
                 hotRestartConfig.setFsync(getBooleanValue(getTextContent(n)));
+            } else if ("store-metadata".equals(name)) {
+                hotRestartConfig.setStoreMetadata(getBooleanValue(getTextContent(n)));
             }
         }
         return hotRestartConfig;

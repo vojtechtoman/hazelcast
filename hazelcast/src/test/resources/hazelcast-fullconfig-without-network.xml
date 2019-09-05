@@ -314,6 +314,7 @@
 
         <hot-restart>
             <fsync>true</fsync>
+            <store-metadata>true</store-metadata>
         </hot-restart>
 
         <!--
@@ -544,6 +545,7 @@
         </partition-lost-listeners>
         <hot-restart>
             <fsync>true</fsync>
+            <store-metadata>false</store-metadata>
         </hot-restart>
     </cache>
 

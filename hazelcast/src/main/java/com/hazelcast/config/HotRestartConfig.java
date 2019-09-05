@@ -16,6 +16,7 @@
 
 package com.hazelcast.config;
 
+import com.hazelcast.internal.cluster.Versions;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.IdentifiedDataSerializable;
@@ -29,6 +30,7 @@ public class HotRestartConfig implements IdentifiedDataSerializable {
 
     private boolean enabled;
     private boolean fsync;
+    private boolean storeMetadata;
 
     public HotRestartConfig() {
     }
@@ -36,6 +38,7 @@ public class HotRestartConfig implements IdentifiedDataSerializable {
     public HotRestartConfig(HotRestartConfig hotRestartConfig) {
         enabled = hotRestartConfig.enabled;
         fsync = hotRestartConfig.fsync;
+        storeMetadata = hotRestartConfig.storeMetadata;
     }
 
     /**
@@ -77,11 +80,30 @@ public class HotRestartConfig implements IdentifiedDataSerializable {
         return this;
     }
 
+    /**
+     * Returns whether record metadata should be stored on related data structure.
+     *
+     * @return true if record metadata is to be stored, false otherwise
+     */
+    public boolean isStoreMetadata() {
+        return storeMetadata;
+    }
+
+    /**
+     * Sets whether record metadata should be stored on related data structure.
+     * @param storeMetadata true if record metadata is to be stored, false otherwise
+     */
+    public HotRestartConfig setStoreMetadata(boolean storeMetadata) {
+        this.storeMetadata = storeMetadata;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "HotRestartConfig{"
                 + "enabled=" + enabled
                 + ", fsync=" + fsync
+                + ", storeMetadata=" + storeMetadata
                 + '}';
     }
 
@@ -99,12 +121,20 @@ public class HotRestartConfig implements IdentifiedDataSerializable {
     public void writeData(ObjectDataOutput out) throws IOException {
         out.writeBoolean(enabled);
         out.writeBoolean(fsync);
+        // RU_COMPAT_3_12_X
+        if (out.getVersion().isGreaterOrEqual(Versions.V3_12)) {
+            out.writeBoolean(storeMetadata);
+        }
     }
 
     @Override
     public void readData(ObjectDataInput in) throws IOException {
         enabled = in.readBoolean();
         fsync = in.readBoolean();
+        // RU_COMPAT_3_12_X
+        if (in.getVersion().isGreaterOrEqual(Versions.V3_12)) {
+            storeMetadata = in.readBoolean();
+        }
     }
 
     @Override
@@ -120,13 +150,17 @@ public class HotRestartConfig implements IdentifiedDataSerializable {
         if (enabled != that.enabled) {
             return false;
         }
-        return fsync == that.fsync;
+        if (fsync != that.fsync) {
+            return false;
+        }
+        return storeMetadata ==  that.storeMetadata;
     }
 
     @Override
     public final int hashCode() {
         int result = (enabled ? 1 : 0);
         result = 31 * result + (fsync ? 1 : 0);
+        result = 31 * result + (storeMetadata ? 1 : 0);
         return result;
     }
 }

@@ -908,7 +908,8 @@ public class ConfigXmlGenerator {
     private static void appendHotRestartConfig(XmlGenerator gen, HotRestartConfig m) {
         gen.open("hot-restart", "enabled", m != null && m.isEnabled())
                 .node("fsync", m != null && m.isFsync())
-                .close();
+                .node("store-metadata", m != null && m.isStoreMetadata());
+        gen.close();
     }
 
     private static void cacheConfigXmlGenerator(XmlGenerator gen, Config config) {

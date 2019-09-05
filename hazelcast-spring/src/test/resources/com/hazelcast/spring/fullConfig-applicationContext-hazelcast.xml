@@ -399,7 +399,8 @@
                 </hz:attributes>
                 <hz:quorum-ref>my-quorum</hz:quorum-ref>
                 <hz:merge-policy batch-size="2342">PassThroughMergePolicy</hz:merge-policy>
-                <hz:hot-restart enabled="${testMap.hotRestart.enabled}" fsync="${testMap.hotRestart.fsync}"/>
+                <hz:hot-restart enabled="${testMap.hotRestart.enabled}" fsync="${testMap.hotRestart.fsync}"
+                                store-metadata="${testMap.hotRestart.storeMetadata}"/>
             </hz:map>
             <hz:map name="testMap2"
                     backup-count="2"
@@ -531,7 +532,7 @@
                     </hz:filters>
                 </hz:wan-replication-ref>
                 <hz:quorum-ref>my-quorum</hz:quorum-ref>
-                <hz:hot-restart enabled="true" fsync="true"/>
+                <hz:hot-restart enabled="true" fsync="true" store-metadata="false"/>
             </hz:cache>
 
             <hz:event-journal map-name="mapName" cache-name="cacheName" enabled="true"

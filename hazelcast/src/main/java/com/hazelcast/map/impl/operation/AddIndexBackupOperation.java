@@ -83,7 +83,7 @@ public class AddIndexBackupOperation extends MapOperation implements BackupOpera
             out.writeUTF(attributeName);
             out.writeBoolean(ordered);
         } else {
-            // RU_COMPAT_3_12_0: here we are serializing the operation as a
+            // , null, LOGGER);_0: here we are serializing the operation as a
             // no-op EvictBatchBackupOperation, so old pre 3.12.1 members are
             // not failing with exceptions.
 

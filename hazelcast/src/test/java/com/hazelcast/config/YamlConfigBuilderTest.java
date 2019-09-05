@@ -45,6 +45,7 @@ import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -2130,6 +2131,7 @@ public class YamlConfigBuilderTest extends AbstractConfigBuilderTest {
                 + "      hot-restart:\n"
                 + "        enabled: false\n"
                 + "        fsync: false\n"
+                + "        store-metadata: false\n"
                 + "      partition-lost-listeners:\n"
                 + "        - com.your-package.YourPartitionLostListener\n"
                 + "      cache-entry-listeners:\n"
@@ -2165,6 +2167,7 @@ public class YamlConfigBuilderTest extends AbstractConfigBuilderTest {
         assertTrue(cacheConfig.isDisablePerEntryInvalidationEvents());
         assertFalse(cacheConfig.getHotRestartConfig().isEnabled());
         assertFalse(cacheConfig.getHotRestartConfig().isFsync());
+        assertFalse(cacheConfig.getHotRestartConfig().isStoreMetadata());
         assertEquals(1, cacheConfig.getPartitionLostListenerConfigs().size());
         assertEquals("com.your-package.YourPartitionLostListener",
                 cacheConfig.getPartitionLostListenerConfigs().get(0).getClassName());
@@ -2471,6 +2474,7 @@ public class YamlConfigBuilderTest extends AbstractConfigBuilderTest {
                 + "      hot-restart:\n"
                 + "        enabled: false\n"
                 + "        fsync: false\n"
+                + "        store-metadata: false\n"
                 + "      map-store:\n"
                 + "        enabled: true \n"
                 + "        initial-mode: LAZY\n"
@@ -2546,6 +2550,7 @@ public class YamlConfigBuilderTest extends AbstractConfigBuilderTest {
         assertEquals("com.your-package.MyEntryListener", mapConfig.getEntryListenerConfigs().get(0).getClassName());
         assertFalse(mapConfig.getHotRestartConfig().isEnabled());
         assertFalse(mapConfig.getHotRestartConfig().isFsync());
+        assertFalse(mapConfig.getHotRestartConfig().isStoreMetadata());
 
         MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
         assertNotNull(mapStoreConfig);

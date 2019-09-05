@@ -178,7 +178,7 @@ public final class ConfigValidator {
                     if (endpointConfigs.get(qualifier) == null) {
                         throw new InvalidConfigurationException(
                                 format("WAN publisher config for group name '%s' requires an wan-endpoint "
-                                + "config with identifier '%s' but none was found",
+                                                + "config with identifier '%s' but none was found",
                                         wanPublisherConfig.getGroupName(), wanPublisherConfig.getEndpoint()));
                     }
                 }
