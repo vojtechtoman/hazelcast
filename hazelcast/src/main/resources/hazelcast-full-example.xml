@@ -1028,8 +1028,6 @@
         sub-elements:
         - <fsync>:
             Set to true if the writing to disk should be followed by an fsync() system call. Its default value is false.
-        - <store-metadata>:
-            Set to true if record metadata such as TTL and max-idle is to be stored with each record. Default value is false.
         * <map-store>:
         Configuration options when you want to load/store the map entries from/to a persistent data store such as a
         relational database. Before configuring <map-store>, you need to implement Hazelcast's MapStore or MapLoader
@@ -1192,7 +1190,6 @@
         <read-backup-data>false</read-backup-data>
         <hot-restart enabled="false">
             <fsync>false</fsync>
-            <store-metadata>false</store-metadata>
         </hot-restart>
         <map-store enabled="true" initial-mode="LAZY">
             <class-name>com.hazelcast.examples.DummyStore</class-name>
@@ -1495,8 +1492,6 @@
         sub-elements:
         - <fsync>:
             Set as true if the writing to disk should be followed by an fsync() system call. Its default value is false.
-        - <store-metadata>:
-            Set to true if record metadata such as TTL and max-idle is to be stored with each record. Default value is false.
         * <disable-per-entry-invalidation-events>:
         Disables invalidation events for each entry; but full-flush invalidation events are still enabled.
         Full-flush invalidation means the invalidation of events for all entries when clear is called.
@@ -1541,7 +1536,6 @@
         <merge-policy>com.hazelcast.cache.merge.LatestAccessCacheMergePolicy</merge-policy>
         <hot-restart enabled="false">
             <fsync>false</fsync>
-            <store-metadata>false</store-metadata>
         </hot-restart>
         <disable-per-entry-invalidation-events>true</disable-per-entry-invalidation-events>
     </cache>
@@ -2485,6 +2479,8 @@
             PARTIAL_RECOVERY_MOST_COMPLETE: Starts the cluster with the largest group of members which have the same partition
             table version and successfully restored their data. All other members will leave the cluster and force start themselves.
             If no member restores its data successfully, cluster start fails.
+        * <store-metadata>:
+            Set to true if record metadata such as TTL and max-idle is to be stored with each record. Default value is false.
     -->
     <hot-restart-persistence enabled="true">
         <base-dir>/mnt/hot-restart</base-dir>
@@ -2492,6 +2488,7 @@
         <validation-timeout-seconds>120</validation-timeout-seconds>
         <data-load-timeout-seconds>900</data-load-timeout-seconds>
         <cluster-data-recovery-policy>PARTIAL_RECOVERY_MOST_COMPLETE</cluster-data-recovery-policy>
+        <store-metadata>false</store-metadata>
     </hot-restart-persistence>
 
     <!--

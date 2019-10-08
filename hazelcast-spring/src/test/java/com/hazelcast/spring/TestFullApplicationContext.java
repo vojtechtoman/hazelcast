@@ -301,7 +301,6 @@ public class TestFullApplicationContext extends HazelcastTestSupport {
         assertTrue(cacheConfig.isDisablePerEntryInvalidationEvents());
         assertTrue(cacheConfig.getHotRestartConfig().isEnabled());
         assertTrue(cacheConfig.getHotRestartConfig().isFsync());
-        assertTrue(cacheConfig.getHotRestartConfig().isStoreMetadata());
 
         WanReplicationRef wanRef = cacheConfig.getWanReplicationRef();
         assertEquals("testWan", wanRef.getName());
@@ -325,7 +324,6 @@ public class TestFullApplicationContext extends HazelcastTestSupport {
         assertEquals(0, testMapConfig.getTimeToLiveSeconds());
         assertTrue(testMapConfig.getHotRestartConfig().isEnabled());
         assertTrue(testMapConfig.getHotRestartConfig().isFsync());
-        assertTrue(testMapConfig.getHotRestartConfig().isStoreMetadata());
         assertEquals(MetadataPolicy.OFF, testMapConfig.getMetadataPolicy());
         assertEquals(1000, testMapConfig.getMinEvictionCheckMillis());
         assertTrue(testMapConfig.isReadBackupData());
@@ -1330,6 +1328,7 @@ public class TestFullApplicationContext extends HazelcastTestSupport {
         assertEquals(2222, hotRestartPersistenceConfig.getDataLoadTimeoutSeconds());
         assertEquals(PARTIAL_RECOVERY_MOST_COMPLETE, hotRestartPersistenceConfig.getClusterDataRecoveryPolicy());
         assertFalse(hotRestartPersistenceConfig.isAutoRemoveStaleData());
+        assertTrue(hotRestartPersistenceConfig.isStoreMetadata());
     }
 
     @Test

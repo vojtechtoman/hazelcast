@@ -907,8 +907,7 @@ public class ConfigXmlGenerator {
 
     private static void appendHotRestartConfig(XmlGenerator gen, HotRestartConfig m) {
         gen.open("hot-restart", "enabled", m != null && m.isEnabled())
-                .node("fsync", m != null && m.isFsync())
-                .node("store-metadata", m != null && m.isStoreMetadata());
+                .node("fsync", m != null && m.isFsync());
         gen.close();
     }
 
@@ -1383,6 +1382,7 @@ public class ConfigXmlGenerator {
                 .node("data-load-timeout-seconds", hrCfg.getDataLoadTimeoutSeconds())
                 .node("cluster-data-recovery-policy", hrCfg.getClusterDataRecoveryPolicy())
                 .node("auto-remove-stale-data", hrCfg.isAutoRemoveStaleData())
+                .node("store-metadata", hrCfg.isStoreMetadata())
                 .close();
     }
 

@@ -314,7 +314,6 @@
 
         <hot-restart>
             <fsync>true</fsync>
-            <store-metadata>true</store-metadata>
         </hot-restart>
 
         <!--
@@ -545,7 +544,6 @@
         </partition-lost-listeners>
         <hot-restart>
             <fsync>true</fsync>
-            <store-metadata>false</store-metadata>
         </hot-restart>
     </cache>
 
@@ -825,6 +823,7 @@
         <data-load-timeout-seconds>42</data-load-timeout-seconds>
         <parallelism>3</parallelism>
         <validation-timeout-seconds>10</validation-timeout-seconds>
+        <store-metadata>true</store-metadata>
     </hot-restart-persistence>
 
     <event-journal>

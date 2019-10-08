@@ -20,7 +20,6 @@ import com.hazelcast.cache.impl.DeferredValue;
 import com.hazelcast.config.CacheSimpleConfig.ExpiryPolicyFactoryConfig.DurationConfig;
 import com.hazelcast.config.CacheSimpleConfig.ExpiryPolicyFactoryConfig.TimedExpiryPolicyFactoryConfig;
 import com.hazelcast.config.CacheSimpleConfig.ExpiryPolicyFactoryConfig.TimedExpiryPolicyFactoryConfig.ExpiryPolicyType;
-import com.hazelcast.internal.cluster.Versions;
 import com.hazelcast.nio.ClassLoaderUtil;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
@@ -532,10 +531,6 @@ public class CacheConfig<K, V> extends AbstractCacheConfig<K, V> implements Spli
         out.writeBoolean(isStatisticsEnabled);
         out.writeBoolean(hotRestartConfig.isEnabled());
         out.writeBoolean(hotRestartConfig.isFsync());
-        // RU_COMPAT_3_12_X
-        if (out.getVersion().isGreaterOrEqual(Versions.V3_12)) {
-            out.writeBoolean(hotRestartConfig.isStoreMetadata());
-        }
 
         out.writeUTF(quorumName);
 
@@ -577,10 +572,6 @@ public class CacheConfig<K, V> extends AbstractCacheConfig<K, V> implements Spli
             isStatisticsEnabled = in.readBoolean();
             hotRestartConfig.setEnabled(in.readBoolean());
             hotRestartConfig.setFsync(in.readBoolean());
-            // RU_COMPAT_3_12_X
-            if (in.getVersion().isGreaterOrEqual(Versions.V3_12)) {
-                hotRestartConfig.setStoreMetadata(in.readBoolean());
-            }
 
             quorumName = in.readUTF();
 

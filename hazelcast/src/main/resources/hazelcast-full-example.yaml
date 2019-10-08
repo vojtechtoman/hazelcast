@@ -1016,8 +1016,6 @@ hazelcast:
   # sub-element.
   # - "fsync":
   #     Set to true if the writing to disk should be followed by an fsync() system call. Its default value is false.
-  # - "store-metadata":
-  #     Set to true if record metadata such as TTL and max-idle is to be stored with each record. Default value is false.
   # * "map-store":
   # Configuration options when you want to load/store the map entries from/to a persistent data store such as a
   # relational database. Before configuring "map-store", you need to implement Hazelcast's MapStore or MapLoader
@@ -1186,7 +1184,6 @@ hazelcast:
       hot-restart:
         enabled: false
         fsync: false
-        store-metadata: false
       map-store:
         enabled: true
         initial-mode: LAZY
@@ -1494,8 +1491,6 @@ hazelcast:
   # sub-elements:
   # - "fsync":
   #     Set as true if the writing to disk should be followed by an fsync() system call. Its default value is false.
-  # - "store-metadata":
-  #     Set to true if record metadata such as TTL and max-idle is to be stored with each record. Default value is false.
   # * "disable-per-entry-invalidation-events":
   # Disables invalidation events for each entry; but full-flush invalidation events are still enabled.
   # Full-flush invalidation means the invalidation of events for all entries when clear is called.
@@ -1545,7 +1540,6 @@ hazelcast:
       hot-restart:
         enabled: false
         fsync: false
-        store-metadata: false
       disable-per-entry-invalidation-events: true
   #
   # ===== HAZELCAST EVENT JOURNAL CONFIGURATION =====
@@ -2461,6 +2455,8 @@ hazelcast:
   #     PARTIAL_RECOVERY_MOST_COMPLETE: Starts the cluster with the largest group of members which have the same partition
   #     table version and successfully restored their data. All other members will leave the cluster and force start themselves.
   #     If no member restores its data successfully, cluster start fails.
+  # * "store-metadata":
+  #     Set to true if record metadata such as TTL and max-idle is to be stored with each record. Default value is false.
   #
   hot-restart-persistence:
     enabled: true
@@ -2469,6 +2465,7 @@ hazelcast:
     validation-timeout-seconds: 120
     data-load-timeout-seconds: 900
     cluster-data-recovery-policy: PARTIAL_RECOVERY_MOST_COMPLETE
+    store-metadata: false
 
   #
   # ===== HAZELCAST USER CODE DEPLOYMENT CONFIGURATION =====

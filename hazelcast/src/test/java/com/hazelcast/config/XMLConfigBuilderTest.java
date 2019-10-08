@@ -46,7 +46,6 @@ import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -2045,7 +2044,6 @@ public class XMLConfigBuilderTest extends AbstractConfigBuilderTest {
                 + "        <disable-per-entry-invalidation-events>true</disable-per-entry-invalidation-events>"
                 + "        <hot-restart enabled=\"false\">\n"
                 + "            <fsync>false</fsync>\n"
-                + "            <store-metadata>false</store-metadata>\n"
                 + "        </hot-restart>\n"
                 + "        <partition-lost-listeners>\n"
                 + "            <partition-lost-listener>com.your-package.YourPartitionLostListener</partition-lost-listener>\n"
@@ -2085,7 +2083,6 @@ public class XMLConfigBuilderTest extends AbstractConfigBuilderTest {
         assertTrue(cacheConfig.isDisablePerEntryInvalidationEvents());
         assertFalse(cacheConfig.getHotRestartConfig().isEnabled());
         assertFalse(cacheConfig.getHotRestartConfig().isFsync());
-        assertFalse(cacheConfig.getHotRestartConfig().isStoreMetadata());
         assertEquals(1, cacheConfig.getPartitionLostListenerConfigs().size());
         assertEquals("com.your-package.YourPartitionLostListener", cacheConfig.getPartitionLostListenerConfigs().get(0).getClassName());
         assertEquals(1, cacheConfig.getCacheEntryListeners().size());
@@ -2372,7 +2369,6 @@ public class XMLConfigBuilderTest extends AbstractConfigBuilderTest {
                 + "        <read-backup-data>true</read-backup-data>"
                 + "        <hot-restart enabled=\"false\">\n"
                 + "            <fsync>false</fsync>\n"
-                + "            <store-metadata>false</store-metadata>\n"
                 + "        </hot-restart>\n"
                 + "        <map-store enabled=\"true\" initial-mode=\"LAZY\">\n"
                 + "            <class-name>com.hazelcast.examples.DummyStore</class-name>\n"
@@ -2450,7 +2446,6 @@ public class XMLConfigBuilderTest extends AbstractConfigBuilderTest {
         assertEquals("com.your-package.MyEntryListener", mapConfig.getEntryListenerConfigs().get(0).getClassName());
         assertFalse(mapConfig.getHotRestartConfig().isEnabled());
         assertFalse(mapConfig.getHotRestartConfig().isFsync());
-        assertFalse(mapConfig.getHotRestartConfig().isStoreMetadata());
 
         MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
         assertNotNull(mapStoreConfig);
@@ -2878,6 +2873,7 @@ public class XMLConfigBuilderTest extends AbstractConfigBuilderTest {
                 + "    <data-load-timeout-seconds>" + dataLoadTimeout + "</data-load-timeout-seconds>"
                 + "    <cluster-data-recovery-policy>" + policy + "</cluster-data-recovery-policy>"
                 + "    <auto-remove-stale-data>false</auto-remove-stale-data>"
+                + "    <store-metadata>true</store-metadata>"
                 + "</hot-restart-persistence>\n"
                 + HAZELCAST_END_TAG;
 
@@ -2892,6 +2888,7 @@ public class XMLConfigBuilderTest extends AbstractConfigBuilderTest {
         assertEquals(dataLoadTimeout, hotRestartPersistenceConfig.getDataLoadTimeoutSeconds());
         assertEquals(policy, hotRestartPersistenceConfig.getClusterDataRecoveryPolicy());
         assertFalse(hotRestartPersistenceConfig.isAutoRemoveStaleData());
+        assertTrue(hotRestartPersistenceConfig.isStoreMetadata());
     }
 
     @Override
